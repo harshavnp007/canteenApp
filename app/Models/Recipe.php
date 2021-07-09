@@ -20,22 +20,17 @@ class Recipe extends Model implements HasMedia
 
     protected $fillable = [
         'name',
-        'servings',
-        'adults',
-        'kids',
-        'timing',
-        'instruction'
+        'stocks',
+        'price',
+        'timing_from',
+        'timing_to',
+        'description'
     ];
 
     protected $filters = [
         'sort',
         'between'
     ];
-
-    public function ingredients()
-    {
-        return $this->belongsToMany(Ingredient::class)->withPivot('quantity');
-    }
 
     public function user()
     {
@@ -50,11 +45,6 @@ class Recipe extends Model implements HasMedia
     public function comments()
     {
         return $this->hasMany(Comment::class)->orderBy('created_at', 'DESC');
-    }
-
-    public function allergens()
-    {
-        return $this->belongsToMany(Allergen::class)->withPivot('level');
     }
 
     public function menus()

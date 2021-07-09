@@ -8,7 +8,10 @@
         </p>
     </div>
     <div class="p-3">
-        <form action="" method="POST" enctype="multipart/form-data">
+        @foreach($errors->all() as $error)
+            <span class="text-xl">{{$error}}</span>
+        @endforeach
+        <form action="{{secure_url('recipes')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="space-y-4">
                 <div class="items-start md:grid md:grid-cols-9 md:space-x-6">
@@ -25,12 +28,25 @@
                     </div>
                 </div>
                 <div class="items-start md:grid md:grid-cols-9 md:space-x-6">
-                    <label for="servings" class="dark:text-gray-200 self-center">
-                        # of Servings
+                    <label for="stocks" class="dark:text-gray-200 self-center">
+                        Stock Available?
                     </label>
                     <div class="w-full md:col-span-4">
-                        <input type="text" name="servings" id="servings" value="{{ Request::old('servings') }}" class="border-1 border-gray-100 shadow bg-opacity-20 rounded-lg placeholder-gray-500 w-full lg:w-60 focus:outline-none focus:ring-1 focus:border-green-500 focus:ring-green-500 dark:bg-gray-900 dark:border-transparent dark:text-gray-200">
-                        @error('servings')
+                        <input type="checkbox" name="stocks" id="stocks" checked class="border-1 border-gray-100 shadow bg-opacity-20 rounded-lg placeholder-gray-500 w-20 focus:outline-none focus:ring-1 focus:border-green-500 focus:ring-green-500 dark:bg-gray-900 dark:border-transparent dark:text-gray-200">
+                        @error('stocks')
+                            <p class="text-red-500 italic text-xs font-light">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+                </div>
+                <div class="items-start md:grid md:grid-cols-9 md:space-x-6">
+                    <label for="price" class="dark:text-gray-200 self-center">
+                       Price per meal
+                    </label>
+                    <div class="w-full md:col-span-4">
+                        <input type="number" min="1" name="price" id="price" value="{{ Request::old('price') }}" class="border-1 border-gray-100 shadow bg-opacity-20 rounded-lg placeholder-gray-500 w-full lg:w-60 focus:outline-none focus:ring-1 focus:border-green-500 focus:ring-green-500 dark:bg-gray-900 dark:border-transparent dark:text-gray-200">
+                        @error('price')
                             <p class="text-red-500 italic text-xs font-light">
                                 {{ $message }}
                             </p>
@@ -42,39 +58,37 @@
                         Image
                     </label>
                     <div class="w-full md:col-span-4">
-                        <div x-data x-init="
-                            FilePond.create($refs.input);
-                            FilePond.setOptions({
-                                server: {
-                                    url: '/upload',
-                                    headers: {
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                    }
-                                }
-                            });
-                        ">
-                            <input type="file" name="image" x-ref="input">
-                        </div>
+                        <input type="file" name="image">
+                    </div>
                     </div>
                 </div>
 
                 <div class="md:space-y-2">
                     <label class="dark:text-gray-200 self-center">
-                        Ingredients
+                        Available Between
                     </label>
-                    @error('ingredients')
+                    @error('timing_from')
                         <p class="text-red-500 italic text-xs font-light">
                             {{ $message }}
                         </p>
                     @enderror
-                    @livewire('recipes.create')
+                    <div class="flex space-x-4">
+                        <label for="timing_from">
+                            <span class="block">Starts From</span>
+                            <input type="time" name="timing_from" id="timing_from" >
+                        </label>
+                        <label for="timing_to">
+                            <span class="block">Ends At</span>
+                            <input type="time" name="timing_to" id="timing_to" >
+                        </label>
+                    </div>
                 </div>
                 <div class="md:space-y-2">
                     <label for="instruction" class="dark:text-gray-200 self-center">
                         Description
                     </label>
                     <div>
-                        <textarea name="instruction" id="instruction" class="border-1 border-gray-100 shadow bg-opacity-20 rounded-lg placeholder-gray-500 w-full h-64 focus:outline-none focus:ring-1 focus:border-green-500 focus:ring-green-500 dark:bg-gray-900 dark:border-transparent dark:text-gray-200">{!! old('instruction') !!}</textarea>
+                        <textarea name="description" id="instruction" class="border-1 border-gray-100 shadow bg-opacity-20 rounded-lg placeholder-gray-500 w-full h-64 focus:outline-none focus:ring-1 focus:border-green-500 focus:ring-green-500 dark:bg-gray-900 dark:border-transparent dark:text-gray-200">{!! old('instruction') !!}</textarea>
                     </div>
                 </div>
                 <div>

@@ -38,34 +38,23 @@
                         Meals
                     </span>
                 </a>
-                @if (request()->routeIs('recipes*'))
-                    <a
-                        href="{{ route('recipes.create') }}"
-                        @if (request()->routeIs('recipes.create'))
-                            class="w-full py-2 pl-8 pr-3 mb-3 font-bold text-green-700 bg-white rounded-lg space-x-2"
-                        @else
-                            class="w-full py-2 pl-8 pr-3 mb-3 font-bold rounded-lg hover:bg-white hover:text-green-700 space-x-2"
-                        @endif
-                    >
-                        <i class="fas fa-plus"></i>
-                        <span>
-                            Create Meal
-                        </span>
-                    </a>
-                    <a
-                        href="{{ route('recipes.liked') }}"
-                        @if (request()->routeIs('recipes.liked'))
-                            class="w-full py-2 pl-8 pr-3 mb-3 font-bold text-green-700 bg-white rounded-lg space-x-2"
-                        @else
-                            class="w-full py-2 pl-8 pr-3 mb-3 font-bold rounded-lg hover:bg-white hover:text-green-700 space-x-2"
-                        @endif
-                    >
-                        <i class="fas fa-heart"></i>
-                        <span>
-                            All Meals
-                        </span>
-                    </a>
-                @endif
+                @can('meal_create')
+                    @if (request()->routeIs('recipes*'))
+                        <a
+                            href="{{ route('recipes.create') }}"
+                            @if (request()->routeIs('recipes.create'))
+                                class="w-full py-2 pl-8 pr-3 mb-3 font-bold text-green-700 bg-white rounded-lg space-x-2"
+                            @else
+                                class="w-full py-2 pl-8 pr-3 mb-3 font-bold rounded-lg hover:bg-white hover:text-green-700 space-x-2"
+                            @endif
+                        >
+                            <i class="fas fa-plus"></i>
+                            <span>
+                                Create Meal
+                            </span>
+                        </a>
+                    @endif
+                @endcan
                 @can ('admin_access')
                     <a
                         href="{{ route('admin.dashboard') }}"

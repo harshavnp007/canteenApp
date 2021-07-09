@@ -15,7 +15,7 @@ class StoreRecipeRequest extends FormRequest
     public function authorize()
     {
         abort_if(Gate::denies('meal_create'), 403);
-        
+
         return true;
     }
 
@@ -28,12 +28,10 @@ class StoreRecipeRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'servings' => 'required',
-            'adults' => 'nullable',
-            'kids' => 'nullable',
-            'timing' => 'required',
-            'instruction' => 'required',
-            'ingredients' => 'required|array',
+            'price' => 'required|numeric|min:1',
+            'timing_from' => 'required',
+            'timing_to' => 'required',
+            'description' => 'required',
         ];
     }
 

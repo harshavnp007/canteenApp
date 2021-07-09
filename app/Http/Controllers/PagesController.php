@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Meal;
 use Gate;
 use App\Models\User;
 use App\Models\Recipe;
@@ -14,11 +15,9 @@ class PagesController extends Controller
 {
     public function homepage(): View
     {
-        $topRecipes = Recipe::with('ratings', 'media')->withCount(['ratings as average_rating' => function($query) {
-            $query->select(DB::raw('coalesce(avg(score),0)'));
-        }])->orderByDesc('average_rating')->take(6)->get();
-        
-        return view('homepage', compact('topRecipes'));
+        $meals = Meal::take(6)->get();
+
+        return view('homepage', compact('meals'));
     }
 
     public function adminDashboard(): View
@@ -28,7 +27,7 @@ class PagesController extends Controller
         $users = User::count();
         $recipes = Recipe::count();
         $ingredients = Ingredient::count();
-        
+
         return view('admin.dashboard', compact('users', 'recipes', 'ingredients'));
     }
 }

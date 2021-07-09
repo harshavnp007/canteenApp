@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Gate;
+use App\Models\Meal;
 use App\Models\Recipe;
 use App\Models\Allergen;
 use App\Models\TempFile;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
@@ -21,108 +24,70 @@ class RecipeController extends Controller
     public function index(): View
     {
         abort_if(Gate::denies('meal_access'), 403);
-
         return view('recipes.index');
     }
 
     public function create(): View
     {
         abort_if(Gate::denies('meal_create'), 403);
-
-        $allergens = Allergen::all();
-
-        return view('recipes.create', compact('allergens'));
+        return view('recipes.create');
     }
-    
+
     public function store(StoreRecipeRequest $request): RedirectResponse
     {
-        $recipe = Auth::User()->Recipes()->create([
+        $meal = Meal::create([
             'name' => $request['name'],
-            'servings' => $request['servings'],
-            'adults' => $request->has('adults'),
-            'kids' => $request->has('kids'),
-            'timing' => $request['timing'],
-            'instruction' => $request['instruction']
+            'stocks' => $request['stocks'] == 'on',
+            'price' => $request->has('price'),
+            'timing_from' => Carbon::createFromFormat('H:i',$request['timing_from']),
+            'timing_to' => Carbon::createFromFormat('H:i',$request['timing_to']),
+            'description' => $request['description'],
+            'slug'=>Str::slug($request['name'])
         ]);
 
-        $file = TempFile::where('folder', $request->image)->first();
-        if ($file) {
-            $recipe->addMedia(Storage::path($request->image . '/' . $file->filename))->toMediaCollection();
-            $file->delete();
+        if ($request->hasFile('image')) {
+            $meal->addMedia($request->image)->toMediaCollection();
         }
-
-        for($i = 0; $i < count($request['ingredients']); $i++)   {
-            $recipe->ingredients()->attach($request['ingredients'][$i], ['quantity' => $request['quantities'][$i]]);
-        }
-
-        foreach($request['allergens'] as $id => $level)    {
-            if($level != 'no')  {
-                $recipe->allergens()->attach($id, ['level' => $level]);
-            }
-        }
-
-        return redirect($recipe->path());
+        return redirect('recipes');
     }
 
-    public function show(Recipe $recipe): View
+    public function show($recipeId): View
     {
         abort_if(Gate::denies('meal_show'), 403);
-
-        $allergens = $recipe->allergens()->pluck('level', 'allergen_id')->toArray();
-        $allAllergens = Allergen::all();
-
-        return view('recipes.show', compact('recipe', 'allAllergens', 'allergens'));
+        $meal = Meal::find($recipeId);
+        return view('recipes.show', compact('meal'));
     }
 
-    public function edit(Recipe $recipe): View
+    public function edit($recipeid): View
     {
         abort_if(Gate::denies('meal_edit'), 403);
-
-        $recipe->load('ingredients', 'allergens');
-
-        $allergens = $recipe->allergens()->pluck('level', 'allergen_id')->toArray();
-        $allAllergens = Allergen::all();
-        
-        return view('recipes.edit', compact('recipe', 'allAllergens', 'allergens'));
+        $meal = Meal::find($recipeid);
+        return view('recipes.edit', compact('meal'));
     }
 
-    public function update(UpdateRecipeRequest $request, Recipe $recipe): RedirectResponse
+    public function update(UpdateRecipeRequest $request, $mealid): RedirectResponse
     {
-        $recipe->update($request->validated());
-
-        $file = TempFile::where('folder', $request->image)->first();
-        if ($file) {
-            $mediaItems = $recipe->getMedia();
-            foreach ($mediaItems as $item) {
-                $item->delete();
-            }
-
-            $recipe->addMedia(Storage::path($request->image . '/' . $file->filename))->toMediaCollection();
-            $file->delete();
+        $meal = Meal::find($mealid);
+        if ($meal->getMedia()) {
+            $mediaItems = $meal->getMedia()->first();
+            $mediaItems->delete();
+            $meal->addMedia($request->image)->toMediaCollection();
         }
 
-        foreach($request['allergens'] as $id => $level)    {
-            if ($recipe->allergens->contains($id)) {
-                if ($level != 'no') {
-                    $recipe->allergens()->updateExistingPivot($id, [
-                        'level' => $level
-                    ]);
-                } else {
-                    $recipe->allergens()->detach($id);
-                }
-            } elseif ($level != 'no') {
-                $allergen = Allergen::find($id);
-                $recipe->allergens()->attach($allergen, ['level' => $level]);
-            }
-        }
-
-        return redirect($recipe->path());
+        $meal->name = $request->get('name');
+        $meal->stocks = $request->get('stocks') == 'on';
+        $meal->price = $request->get('price');
+        $meal->timing_from =Carbon::createFromFormat('H:i',$request->get('timing_from'));
+        $meal->timing_to =Carbon::createFromFormat('H:i',$request->get('timing_to'));
+        $meal->description = $request->get('description');
+        $meal->save();
+        return redirect('recipes');
     }
 
     public function destroy(Recipe $recipe): RedirectResponse
     {
         abort_if(Gate::denies('meal_delete'), 403);
-        
+
         $recipe->delete();
 
         return redirect()->back();
@@ -131,7 +96,7 @@ class RecipeController extends Controller
     public function liked(): View
     {
         abort_if(Gate::denies('meal_access'), 403);
-        
+
         $recipes = Auth()->user()->likedRecipes()->paginate(15);
 
         return view('recipes.liked', compact('recipes'));
