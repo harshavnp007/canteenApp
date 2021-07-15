@@ -26,8 +26,8 @@
                         Home
                     </span>
                 </a>
-                <a href="{{ route('recipes.index') }}"
-                    @if (request()->routeIs('recipes*'))
+                <a href="{{\Illuminate\Support\Facades\Auth::user()->hasRole('User') ? route('recipes.index') : route('adminRecipe') }}"
+                    @if (request()->routeIs('recipes*') || request()->is('admin-recipe'))
                         class="w-full p-3 mb-3 font-bold text-green-700 bg-white rounded-lg space-x-2"
                     @else
                         class="w-full p-3 mb-3 font-bold rounded-lg hover:bg-white hover:text-green-700 space-x-2"
@@ -38,6 +38,25 @@
                         Meals
                     </span>
                 </a>
+                @if(\Illuminate\Support\Facades\Auth::user()->hasRole('User'))
+                <a
+                    href="{{ secure_url('cart') }}"
+                    @if (request()->is('cart'))
+                    class="w-full p-3 mb-3 font-bold text-green-700 bg-white rounded-lg space-x-2"
+                    @else
+                    class="w-full p-3 mb-3 font-bold rounded-lg hover:bg-white hover:text-green-700 space-x-2"
+                    @endif
+                >
+                    <span class="flex">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 mr-2 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span>
+                            Your Basket
+                        </span>
+                    </span>
+                </a>
+                @endif
                 @can('meal_create')
                     @if (request()->routeIs('recipes*'))
                         <a
@@ -58,7 +77,7 @@
                 @can ('admin_access')
                     <a
                         href="{{ route('admin.dashboard') }}"
-                        @if (request()->routeIs('admin*'))
+                        @if (request()->routeIs('admin'))
                             class="w-full p-3 mb-3 font-bold text-green-700 bg-white rounded-lg space-x-2"
                         @else
                             class="w-full p-3 mb-3 font-bold rounded-lg hover:bg-white hover:text-green-700 space-x-2"

@@ -28,6 +28,10 @@ Route::get('/',function (){
    return view('start_page');
 });
 
+
+
+Route::get('meals',[\App\Http\Controllers\MealsController::class,'meals']);
+
 Route::middleware(['auth'])->group(function() {
     Route::get('home', [PagesController::class, 'homepage'])->name('homepage');
 
@@ -39,8 +43,8 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/user/profile/settings/account/password', [ProfileController::class, 'password'])->name('profile.settings.password');
     Route::get('/user/profile/settings/security', [ProfileController::class, 'securitySettings'])->name('profile.settings.security');
 
-    Route::redirect('/meals/{meal}', '/recipes/{meal}', 301);
-    Route::redirect('/meals/', '/recipes/', 301);
+//    Route::redirect('/meals/{meal}', '/recipes/{meal}', 301);
+//    Route::redirect('/meals/', '/recipes/', 301);
     Route::get('recipes/liked', [RecipeController::class, 'liked'])->name('recipes.liked');
     Route::get('recipes/{recipe}/like', [RecipeController::class, 'like'])->name('recipes.like');
     Route::get('recipes/{recipe}/unlike', [RecipeController::class, 'unlike'])->name('recipes.unlike');
@@ -56,6 +60,13 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/users/approve/{email}', [UserController::class, 'approve'])->name('users.approve');
         Route::resource('users', UserController::class)->except('show');
     });
+
+    Route::get('admin-recipe', [UserController::class, 'adminRecipe'])->name('adminRecipe');
+
+    // Carts Routes
+    Route::get('cart',[\App\Http\Controllers\CartController::class,'cart_list']);
+    Route::post('cart/{product_id}',[\App\Http\Controllers\CartController::class,'save_cart']);
+    Route::post('edit-cart/{cart_id}/{action}',[\App\Http\Controllers\CartController::class,'edit_cart']);
 
 });
 

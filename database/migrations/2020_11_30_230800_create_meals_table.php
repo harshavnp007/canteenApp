@@ -22,6 +22,7 @@ class CreateMealsTable extends Migration
             $table->time('timing_from');
             $table->time('timing_to');
             $table->text('description');
+            $table->smallInteger('category');
             $table->timestamps();
             $table->softDeletes();
         });

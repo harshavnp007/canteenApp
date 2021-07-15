@@ -19,7 +19,6 @@
                     <p class="mb-2">
                         {{ $meal->name }}
                     </p>
-
                 </div>
             </div>
         </a>

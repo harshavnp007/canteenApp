@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Meal;
 use Gate;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -40,7 +42,7 @@ class UserController extends Controller
     public function edit(User $user): View
     {
         abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        
+
         return view('admin.users.edit', compact('user'));
     }
 
@@ -54,7 +56,7 @@ class UserController extends Controller
     public function destroy(User $user): RedirectResponse
     {
         abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        
+
         $user->delete();
 
         return redirect()->route('admin.users.index');
@@ -71,4 +73,14 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index');
     }
+
+    public function adminRecipe(){
+        $user = Auth::user();
+        if(!$user->hasRole('User')){
+            $meals = Meal::all();
+            return view('admin.meal',compact('meals'));
+        }
+        return abort(403);
+    }
+
 }

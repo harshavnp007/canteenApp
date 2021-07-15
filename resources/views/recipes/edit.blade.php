@@ -54,6 +54,18 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="items-start w-full md:grid md:grid-cols-9 md:space-x-6">
+                        <label for="category" class="dark:text-gray-200 self-center">
+                            Meal category
+                        </label>
+                        <div class="w-full md:col-span-4">
+                            <select name="category" id="category">
+                                @foreach(\App\Models\Meal::$categories as $label=>$category)
+                                    <option {{$category == $meal->category ? 'selected' : ''}} value="{{$category}}">{{$label}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class=" md:space-x-6">
                         @if ($meal->getMedia()->count() > 0)
                             <div class="w-full h-full rounded-xl">

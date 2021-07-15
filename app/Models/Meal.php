@@ -11,6 +11,10 @@ class Meal extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
+    static public $categories = [
+        'breakfast'=>1,'lunch'=>2,'snacks'=>3
+    ];
+
     protected $fillable = [
         'name',
         'stocks',
@@ -18,6 +22,7 @@ class Meal extends Model implements HasMedia
         'timing_from',
         'timing_to',
         'description',
-        'slug'
+        'slug',
+        'category'
     ];
 }

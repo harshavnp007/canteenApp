@@ -42,6 +42,7 @@ class RecipeController extends Controller
             'timing_from' => Carbon::createFromFormat('H:i',$request['timing_from']),
             'timing_to' => Carbon::createFromFormat('H:i',$request['timing_to']),
             'description' => $request['description'],
+            'category' => $request['category'],
             'slug'=>Str::slug($request['name'])
         ]);
 

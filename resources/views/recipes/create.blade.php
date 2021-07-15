@@ -53,6 +53,18 @@
                         @enderror
                     </div>
                 </div>
+                <div class="items-start w-full md:grid md:grid-cols-9 md:space-x-6">
+                    <label for="category" class="dark:text-gray-200 self-center">
+                       Meal category
+                    </label>
+                    <div class="w-full md:col-span-4">
+                        <select name="category" id="category">
+                            @foreach(\App\Models\Meal::$categories as $label=>$category)
+                                <option value="{{$category}}">{{$label}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 <div class="items-start md:grid md:grid-cols-9 md:space-x-6">
                     <label for="image" class="dark:text-gray-200 self-top">
                         Image
@@ -83,7 +95,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="md:space-y-2">
+                <div class="md:space-y-2 my-4">
                     <label for="instruction" class="dark:text-gray-200 self-center">
                         Description
                     </label>
@@ -96,7 +108,6 @@
                         Add Meal
                     </button>
                 </div>
-            </div>
         </form>
     </div>
 </div>
