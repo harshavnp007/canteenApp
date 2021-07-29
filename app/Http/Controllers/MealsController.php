@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class MealsController extends Controller
 {
     public function meals(){
-        $meals = Meal::all();
+        $meals = Meal::with('media')->get();
         return view('meals.list',compact('meals'));
     }
 }

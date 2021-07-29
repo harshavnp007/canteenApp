@@ -15,7 +15,7 @@ class PagesController extends Controller
 {
     public function homepage(): View
     {
-        $meals = Meal::take(6)->get();
+        $meals = Meal::with('media')->take(6)->get();
 
         return view('homepage', compact('meals'));
     }

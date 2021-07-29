@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Wallet;
+use App\Models\WalletDetail;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
@@ -17,11 +19,35 @@ class ProfileController extends Controller
         return view('user.profile.index');
     }
 
+    public function wallet(): View
+    {
+        $wallet = Wallet::where('user_id',\Illuminate\Support\Facades\Auth::id())->first();
+        $walletDetails = WalletDetail::where('wallet_id',$wallet->id)->get();
+        return view('user.wallet',compact('wallet','walletDetails'));
+    }
+
+    public function add_money_wallet(Request $request){
+        $rzp_id= $request->get('rzp_id');
+        $amount= $request->get('amount');
+        if(isset($rzp_id) && $amount > 0){
+            $wallet = Wallet::where('user_id',\Illuminate\Support\Facades\Auth::id())->first();
+            WalletDetail::create([
+               'wallet_id'=>$wallet->id,
+               'credited'=>true,
+               'amount'=>$amount,
+               'rzp_id'=>$rzp_id
+            ]);
+            $wallet->total_amount = $wallet->total_amount+50;
+            $wallet->save();
+        }
+        return redirect()->route('wallet');
+    }
+
     public function accountSettings(): View
     {
         return view('user.profile.account');
     }
-    
+
     public function securitySettings(): View
     {
         return view('user.profile.security');

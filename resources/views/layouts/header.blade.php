@@ -58,7 +58,7 @@
                 </a>
                 @endif
                 @can('meal_create')
-                    @if (request()->routeIs('recipes*'))
+                    @if (request()->routeIs('adminRecipe'))
                         <a
                             href="{{ route('recipes.create') }}"
                             @if (request()->routeIs('recipes.create'))

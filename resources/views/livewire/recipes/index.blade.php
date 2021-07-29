@@ -1,5 +1,5 @@
 <div class="flex flex-col lg:flex-row lg:space-x-6">
-    <div class="w-full lg:w-4/5 order-2 lg:order-1">
+    <div class="flex w-full lg:w-4/5 order-2 lg:order-1">
     @if($meals->count() > 0)
     @foreach($meals as $meal)
         <!-- Column -->

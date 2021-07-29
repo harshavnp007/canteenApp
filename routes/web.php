@@ -38,6 +38,8 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/upload', [UploadController::class, 'store'])->name('upload');
 
     Route::get('/user/profile', [ProfileController::class, 'profile'])->name('profile');
+    Route::get('/user/wallet', [ProfileController::class, 'wallet'])->name('wallet');
+    Route::post('add/wallet/money', [ProfileController::class, 'add_money_wallet'])->name('addMoney');
     Route::get('/user/profile/settings/account', [ProfileController::class, 'accountSettings'])->name('profile.settings.account');
     Route::patch('/user/profile/settings/account', [ProfileController::class, 'update']);
     Route::post('/user/profile/settings/account/password', [ProfileController::class, 'password'])->name('profile.settings.password');
@@ -67,6 +69,20 @@ Route::middleware(['auth'])->group(function() {
     Route::get('cart',[\App\Http\Controllers\CartController::class,'cart_list']);
     Route::post('cart/{product_id}',[\App\Http\Controllers\CartController::class,'save_cart']);
     Route::post('edit-cart/{cart_id}/{action}',[\App\Http\Controllers\CartController::class,'edit_cart']);
+    Route::post('cart/remove/{cart_id}',[\App\Http\Controllers\CartController::class,'cart_remove']);
+    Route::post('save/order',[\App\Http\Controllers\OrderController::class,'saveOrder']);
+    Route::get('orders',[\App\Http\Controllers\OrderController::class,'orders'])->name('orders');
+
+    // Order success
+    Route::get('order/success/{order_id}',function (\Illuminate\Http\Request $request){
+        $order_id = $request->get('order_id');
+        $order = \App\Models\Order::find($order_id);
+        if(isset($order) && $order->user_id == \Illuminate\Support\Facades\Auth::id()){
+            return view('success',compact('order'));
+        }else{
+            return redirect('home')->with(['message'=>'Order information cannot be found, try again']);
+        }
+    });
 
 });
 

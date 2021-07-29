@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class CartController extends Controller
 {
     public function cart_list(){
-        $carts = Cart::with('meal')->where('user_id',Auth::id())->get();
+        $carts = Cart::with('meal','meal.media')->where('user_id',Auth::id())->get();
         return view('cart',compact('carts'));
     }
 
@@ -19,11 +19,17 @@ class CartController extends Controller
         $meal = Meal::find($meal_id);
         if($meal->stocks){
             if(isset($meal)){
-                Cart::create([
-                    'meal_id'=>$meal_id,
-                    'price'=>$meal->price,
-                    'user_id'=>Auth::id()
-                ]);
+                $cart = Cart::where('user_id',Auth::id())->where('meal_id',$meal_id)->first();
+                if($cart){
+                    $cart->qty = $cart->qty +1;
+                    $cart->save();
+                }else{
+                    Cart::create([
+                        'meal_id'=>$meal_id,
+                        'price'=>$meal->price,
+                        'user_id'=>Auth::id()
+                    ]);
+                }
             }
             return redirect('cart');
         }else{
@@ -50,6 +56,14 @@ class CartController extends Controller
                     $cart->save();
                 }
             }
+        }
+        return redirect('cart');
+    }
+
+    public function cart_remove($cart_id){
+        $cart = Cart::find($cart_id);
+        if(isset($cart)){
+            $cart->delete();
         }
         return redirect('cart');
     }

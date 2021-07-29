@@ -77,7 +77,7 @@ class UserController extends Controller
     public function adminRecipe(){
         $user = Auth::user();
         if(!$user->hasRole('User')){
-            $meals = Meal::all();
+            $meals = Meal::with('media')->get();
             return view('admin.meal',compact('meals'));
         }
         return abort(403);

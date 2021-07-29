@@ -35,7 +35,10 @@
                                                 </div>
                                             </div>
                                             <div class="pr-8 "> <span class="text-xs font-medium">₹{{$cart->price * $cart->qty}}</span> </div>
-                                            <div> <i class="fa fa-close text-xs font-medium"></i> </div>
+                                            <form action="{{secure_url('cart/remove/'.$cart->id)}}" method="post">
+                                                @csrf
+                                                <button type="submit"><i class="fa fa-close text-xs font-medium"></i></button>
+                                            </form>
                                         </div>
                                     </div>
                                 @empty
@@ -49,22 +52,31 @@
                                 </div>
                             </div>
                             <div class="flex flex-col justify-between p-5 bg-gray-800 rounded overflow-visible">
-                                <div>
-                                    <span class="text-xl font-medium text-gray-100 block pb-3">Payment Options</span>
-                                    <div class="pb-5 border-b-2 border-gray-300">
-                                        <label class="text-white text-lg" for="cod">
-                                            <input id="cod" type="radio" class="mr-1" checked name="payment_option" value="cod">
-                                            COD
-                                        </label>
+                                <form action="{{secure_url('save/order')}}" method="post">
+                                    @csrf
+                                    <div>
+                                        <span class="text-xl font-medium text-gray-100 block pb-3">Payment Options</span>
+                                        <div class="pb-5 border-b-2 border-gray-300">
+                                            <label class="text-white text-lg" for="cod">
+                                                <input id="cod" type="radio" class="mr-1" checked name="payment_type" value="3">
+                                                COD
+                                            </label>
+                                        </div>
+                                        <div class="py-5 border-b-2 border-gray-300">
+                                            <label class="text-white text-lg" for="online">
+                                                <input id="online" type="radio" class="mr-1" name="payment_type" value="2">
+                                                Wallet
+                                            </label>
+                                        </div>
+{{--                                        <div class="py-5 border-b-2 border-gray-300">--}}
+{{--                                            <label class="text-white text-lg" for="online">--}}
+{{--                                                <input id="online" type="radio" class="mr-1" name="payment_type" value="1">--}}
+{{--                                                Online--}}
+{{--                                            </label>--}}
+{{--                                        </div>--}}
                                     </div>
-                                    <div class="py-5 border-b-2 border-gray-300">
-                                        <label class="text-white text-lg" for="online">
-                                            <input id="online" type="radio" class="mr-1" name="payment_option" value="cod">
-                                            Online
-                                        </label>
-                                    </div>
-                                </div>
-                                <button onclick="showModal()" {{$carts->count() <= 0 ? 'disabled' : ''}} type="button" class="h-12 w-full bg-blue-500 mt-5 rounded focus:outline-none text-white hover:bg-blue-600">Check Out</button>
+                                    <button {{$carts->count() <= 0 ? 'disabled' : ''}} type="submit" class="h-12 w-full bg-blue-500 mt-5 rounded focus:outline-none text-white hover:bg-blue-600">Make Payment</button>
+                                </form>
                             </div>
                         </div>
                     </div>

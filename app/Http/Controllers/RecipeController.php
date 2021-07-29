@@ -38,7 +38,7 @@ class RecipeController extends Controller
         $meal = Meal::create([
             'name' => $request['name'],
             'stocks' => $request['stocks'] == 'on',
-            'price' => $request->has('price'),
+            'price' => $request->get('price'),
             'timing_from' => Carbon::createFromFormat('H:i',$request['timing_from']),
             'timing_to' => Carbon::createFromFormat('H:i',$request['timing_to']),
             'description' => $request['description'],
@@ -71,15 +71,23 @@ class RecipeController extends Controller
         $meal = Meal::find($mealid);
         if ($meal->getMedia()) {
             $mediaItems = $meal->getMedia()->first();
-            $mediaItems->delete();
+            if(isset($mediaItems)){
+                $mediaItems->delete();
+            }
             $meal->addMedia($request->image)->toMediaCollection();
         }
 
+        $timing_from = $request->get('timing_from');
+        $timing_to = $request->get('timing_to');
         $meal->name = $request->get('name');
         $meal->stocks = $request->get('stocks') == 'on';
         $meal->price = $request->get('price');
-        $meal->timing_from =Carbon::createFromFormat('H:i',$request->get('timing_from'));
-        $meal->timing_to =Carbon::createFromFormat('H:i',$request->get('timing_to'));
+        if(isset($timing_from)){
+            $meal->timing_from =Carbon::createFromFormat('H:i',$request->get('timing_from'));
+        }
+        if(isset($timing_to)){
+            $meal->timing_to =Carbon::createFromFormat('H:i',$request->get('timing_to'));
+        }
         $meal->description = $request->get('description');
         $meal->save();
         return redirect('recipes');
