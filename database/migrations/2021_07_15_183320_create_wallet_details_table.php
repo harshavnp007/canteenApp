@@ -15,7 +15,7 @@ class CreateWalletDetailsTable extends Migration
     {
         Schema::create('wallet_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('wallet_id')->constrained('wallets');
+            $table->foreignId('wallet_id');
             $table->string('common_order_number')->nullable();
             $table->boolean('credited');
             $table->double('amount')->nullable();

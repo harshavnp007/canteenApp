@@ -37,7 +37,7 @@ class ProfileController extends Controller
                'amount'=>$amount,
                'rzp_id'=>$rzp_id
             ]);
-            $wallet->total_amount = $wallet->total_amount+50;
+            $wallet->total_amount = $wallet->total_amount+$amount;
             $wallet->save();
         }
         return redirect()->route('wallet');

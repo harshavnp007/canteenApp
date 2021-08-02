@@ -46,6 +46,7 @@ class OrderController extends Controller
                     $orderData['rzp_id']=$rzp_id;
                 }
                 $order = Order::create($orderData);
+                $cart->delete();
             }
             if($payment_type == 2){
                 $wallet = Wallet::where('user_id',Auth::id())->first();

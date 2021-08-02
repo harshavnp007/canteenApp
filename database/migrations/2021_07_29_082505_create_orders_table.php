@@ -24,8 +24,8 @@ class CreateOrdersTable extends Migration
             $table->smallInteger('status')->default(1); // 1 => Pending; 2 => Success; 3 => Failure;
             $table->smallInteger('payment_type');
             $table->string('rzp_id')->nullable();
-            $table->foreignId('wallet_detail_id')->constrained('wallet_details')->nullable();
-            $table->bigInteger('wallet_id')->nullable();
+            $table->foreignId('wallet_detail_id')->nullable()->constrained('wallet_details');
+            $table->foreignId('wallet_id')->nullable()->constrained('wallets');
             $table->timestamps();
         });
     }
