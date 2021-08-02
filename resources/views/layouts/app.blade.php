@@ -20,7 +20,7 @@
             <header>
                 @include('layouts.header')
             </header>
-            <main class="p-4 lg:p-6 w-full lg:ml-72">
+            <main class="p-4 lg:p-6 w-full lg:ml-72 relative" style="background: url('https://images.unsplash.com/photo-1585518419759-7fe2e0fbf8a6?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=624&q=80');background-size: cover;background-repeat: no-repeat;background-position: center;" >
                 <!-- Search Bar -->
                 <div class="flex flex-col lg:flex-row justify-between lg:mb-4">
                     <div></div>
