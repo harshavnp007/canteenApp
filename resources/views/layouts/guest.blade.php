@@ -17,11 +17,11 @@
 <body class="antialiased">
 
 <!-- Section 1 -->
-<section class="w-full px-3 h-screen antialiased lg:px-6" @if(request()->is('/')) style="background: url('{{secure_asset('assets/images/home.png')}}');background-size: cover;background-repeat: no-repeat;background-position: center" @endif>
+<section class="w-full px-3 h-screen antialiased lg:px-6" @if(request()->is('/')) style="background: url('{{secure_asset('assets/images/homepage.jpg')}}');background-size: cover;background-repeat: no-repeat;background-position: center" @endif>
     <div class="mx-auto max-w-7xl">
         <nav class="absolute px-6 top-0 left-0 {{request()->is('/') ? '' : 'bg-gray-600 shadow-lg'}} w-full z-50 h-20 mx-auto" x-data="{ showMenu: false }">
             <div class="container max-w-7xl relative flex flex-wrap items-center justify-between h-20 mx-auto font-medium sm:px-4 md:px-2">
-                <a href="#" class="py-4 pl-0 pr-4 md:pl-4 md:py-0">
+                <a href="{{secure_url('/')}}" class="py-4 pl-0 pr-4 md:pl-4 md:py-0">
                     <span class="text-2xl mb-5 sm:text-3xl font-black leading-none text-white select-none logo">DS BOJANA <span class="text-red-600">.</span></span>
                 </a>
                 <div class="top-0 left-0 w-full flex-1 items-start h-full p-4 text-sm bg-gray-900 bg-opacity-50 md:absolute lg:text-base md:h-auto md:bg-transparent md:p-0 md:relative md:flex hidden " :class="{'flex fixed': showMenu, 'hidden': !showMenu }">
@@ -42,12 +42,7 @@
                                 <a href="{{secure_url('meals')}}" class="inline-flex items-center w-full px-6 py-3 text-lg font-semibold leading-4 text-white transition duration-150 ease-in-out md:bg-transparent bg-red-600 border border-transparent md:px-3 md:w-auto md:rounded-full lg:px-5 md:hover:bg-transparent hover:bg-red-500 focus:outline-none md:focus:border-transparent focus:border-red-700 md:active:bg-transparent active:bg-red-700 dark:bg-red-800 dark:text-gray-300">
                                     Meals
                                 </a>
-                            </span>
-                            <span class="relative shadow-lg md:shadow-none inline-flex w-full md:rounded-full md:w-auto">
-                                <a href="{{secure_url('register')}}" class="inline-flex items-center w-full px-6 py-3 text-lg font-semibold leading-4 text-white transition duration-150 ease-in-out md:bg-transparent bg-red-600 border border-transparent md:px-3 md:w-auto md:rounded-full lg:px-5 md:hover:bg-transparent hover:bg-red-500 focus:outline-none md:focus:border-transparent focus:border-red-700 md:active:bg-transparent active:bg-red-700 dark:bg-red-800 dark:text-gray-300">
-                                    Contact Us
-                                </a>
-                            </span>
+                           
                         </div>
                     </div>
                 </div>

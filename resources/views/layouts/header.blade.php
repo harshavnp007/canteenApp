@@ -73,9 +73,10 @@
                             </span>
                         </a>
                     @endif
+            
                 @endcan
                 @can ('admin_access')
-                    <a
+                <a
                         href="{{ route('admin.dashboard') }}"
                         @if (request()->routeIs('admin'))
                             class="w-full p-3 mb-3 font-bold text-green-700 bg-white rounded-lg space-x-2"
@@ -83,11 +84,11 @@
                             class="w-full p-3 mb-3 font-bold rounded-lg hover:bg-white hover:text-green-700 space-x-2"
                         @endif
                     >
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>
+                        <i class="fas fa-tachometer-alt"></i><span>
                             Statistics
                         </span>
                     </a>
+       
                 @endcan
             </nav>
             <div class="w-full font-bold lg:hidden" x-data="{ open: false }" @click.away="open = false">
