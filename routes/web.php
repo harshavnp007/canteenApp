@@ -60,7 +60,7 @@ Route::middleware(['auth'])->group(function() {
         Route::resource('ingredients', IngredientController::class);
         Route::resource('allergens', AllergenController::class)->except('show');
         Route::get('/users/approve/{email}', [UserController::class, 'approve'])->name('users.approve');
-        Route::resource('users', UserController::class)->except('show');
+        Route::resource('users', UserController::class);
     });
 
     Route::get('admin-recipe', [UserController::class, 'adminRecipe'])->name('adminRecipe');

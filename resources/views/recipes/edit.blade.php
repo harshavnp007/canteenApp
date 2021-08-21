@@ -94,11 +94,11 @@
                     <div class="flex space-x-4">
                         <label for="timing_from">
                             <span class="block">Starts From</span>
-                            <input type="time" name="timing_from" id="timing_from" value="{{$meal->timing_from}}">
+                            <input type="time" name="timing_from" id="timing_from" value="{{Carbon\Carbon::parse($meal->timing_from)->format('H:i')}}">
                         </label>
                         <label for="timing_to">
                             <span class="block">Ends At</span>
-                            <input type="time" name="timing_to" id="timing_to" value="{{$meal->timing_to}}">
+                            <input type="time" name="timing_to" id="timing_to" value="{{Carbon\Carbon::parse($meal->timing_to)->format('H:i')}}">
                         </label>
                     </div>
                 </div>

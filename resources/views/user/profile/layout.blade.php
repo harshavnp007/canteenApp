@@ -25,12 +25,14 @@
                             <a href="{{ route('profile') }}" class="hover:text-yellow-600 dark:text-gray-200 dark:hover:text-yellow-600">
                                 - Profile
                             </a>
+                            @if(Auth::user()->hasRole('User'))
                             <a href="{{ route('orders') }}" class="hover:text-yellow-600 dark:text-gray-200 dark:hover:text-yellow-600">
                                 - Orders
                             </a>
                             <a href="{{ route('wallet') }}" class="hover:text-yellow-600 dark:text-gray-200 dark:hover:text-yellow-600">
                                 - Wallet
                             </a>
+                            @endif
                             <a href="{{ route('profile.settings.account') }}" class="hover:text-yellow-600 dark:text-gray-200 dark:hover:text-yellow-600">
                                 - Account Settings
                             </a>

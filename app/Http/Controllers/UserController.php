@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Meal;
+use App\Models\Order;
+use App\Models\Wallet;
+use App\Models\WalletDetail;
 use Gate;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -20,7 +23,7 @@ class UserController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::all();
+        $users = User::role('user')->get();
 
         return view('admin.users.index', compact('users'));
     }
@@ -37,6 +40,18 @@ class UserController extends Controller
         $user = User::create($request->validated());
 
         return redirect()->route('admin.users.index');
+    }
+
+    public function show($user_id)
+    {
+        $user = User::find($user_id);
+        $orders = Order::where('user_id',$user->id)->with('meal')->get();
+        $wallet = Wallet::where('user_id',$user->id)->first();
+        $walletDetails = null;
+        if(isset($wallet)){
+            $walletDetails = WalletDetail::where('wallet_id',$wallet->id)->get();
+        }
+        return view('admin.users.view',compact('user','orders','wallet','walletDetails'));
     }
 
     public function edit(User $user): View

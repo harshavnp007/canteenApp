@@ -69,28 +69,27 @@ class RecipeController extends Controller
     public function update(UpdateRecipeRequest $request, $mealid): RedirectResponse
     {
         $meal = Meal::find($mealid);
-        if ($meal->getMedia()) {
+        if ($meal->getMedia() && isset($request->image)) {
             $mediaItems = $meal->getMedia()->first();
             if(isset($mediaItems)){
                 $mediaItems->delete();
             }
             $meal->addMedia($request->image)->toMediaCollection();
         }
-
         $timing_from = $request->get('timing_from');
         $timing_to = $request->get('timing_to');
         $meal->name = $request->get('name');
         $meal->stocks = $request->get('stocks') == 'on';
         $meal->price = $request->get('price');
         if(isset($timing_from)){
-            $meal->timing_from =Carbon::createFromFormat('H:i',$request->get('timing_from'));
+            $meal->timing_from =Carbon::createFromFormat('H:i',$timing_from);
         }
         if(isset($timing_to)){
-            $meal->timing_to =Carbon::createFromFormat('H:i',$request->get('timing_to'));
+            $meal->timing_to =Carbon::createFromFormat('H:i',$timing_to);
         }
         $meal->description = $request->get('description');
         $meal->save();
-        return redirect('recipes');
+        return redirect('admin-recipe');
     }
 
     public function destroy(Recipe $recipe): RedirectResponse

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Meal;
+use App\Models\Order;
 use Gate;
 use App\Models\User;
 use App\Models\Recipe;
@@ -25,8 +26,8 @@ class PagesController extends Controller
         abort_if(Gate::denies('admin_access'), 403);
 
         $users = User::count();
-        $recipes = Recipe::count();
-        $ingredients = Ingredient::count();
+        $recipes = Meal::count();
+        $ingredients = Order::count();
 
         return view('admin.dashboard', compact('users', 'recipes', 'ingredients'));
     }
