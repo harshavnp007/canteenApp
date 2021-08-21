@@ -20,7 +20,7 @@
             <header>
                 @include('layouts.header')
             </header>
-            <main class="p-4 lg:p-6 w-full lg:ml-72">
+            <main class="p-4 lg:p-6 w-full lg:ml-72 relative" style="background: url('{{secure_asset('assets/images/app.jpg')}}');background-size: cover;background-repeat: no-repeat;background-position: center;" >
                 <!-- Search Bar -->
                 <div class="flex flex-col lg:flex-row justify-between lg:mb-4">
                     <div></div>

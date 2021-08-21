@@ -26,13 +26,6 @@
                 Orders
             </p>
         </div>
-        <div class="shadow-lg rounded-lg p-4 bg-gradient-to-br from-green-400 to-blue-500 h-32">
-            <p class="font-black text-white text-xl">
-                0
-            </p>
-            <p class="font-black text-white text-xl">
-                Total Earned
-            </p>
-        </div>
+        
     </div>
 @endsection
