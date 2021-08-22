@@ -36,7 +36,7 @@
                             <i class="fa fa-rupee"></i> {{ $walletDetail->amount }}
                         </td>
                         <td class="block lg:table-cell px-4 py-2">
-                            {{ $walletDetail->credited ? 'Created' : 'Debited' }}
+                            {{ $walletDetail->credited ? 'Credited' : 'Debited' }}
                         </td>
                         <td class="block lg:table-cell px-4 py-2 {{ !$walletDetail->credited ? 'text-red-400' : ''}}">
                             @if($walletDetail->credited)

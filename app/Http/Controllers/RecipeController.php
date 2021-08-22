@@ -49,7 +49,7 @@ class RecipeController extends Controller
         if ($request->hasFile('image')) {
             $meal->addMedia($request->image)->toMediaCollection();
         }
-        return redirect('recipes');
+        return redirect('admin-recipe');
     }
 
     public function show($recipeId): View

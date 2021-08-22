@@ -29,7 +29,7 @@
                             </a>
                         </h1>
                         @auth
-                            @if(Auth::user()->hasRole('user'))
+                            @if(Auth::user()->hasRole('User'))
                                 <div class="">
                                     @if($meal->stocks)
                                         @if($meal->cart_info_count <= 0)

@@ -35,16 +35,10 @@
                                                             Order Canceled
                                                         @else
                                                             <div class="flex justify-center space-x-2">
-                                                                <form action="{{secure_url('success/order/'.$eachOrder->id)}}" method="post">
-                                                                    @csrf
-                                                                    <button class="bg-green-400 text-white p-2 rounded-md text-sm" type="submit">
-                                                                        Completed
-                                                                    </button>
-                                                                </form>
                                                                 <form action="{{secure_url('reject/order/'.$eachOrder->id)}}" method="post">
                                                                     @csrf
                                                                     <button class="bg-red-400 text-white p-2 rounded-md text-sm" type="submit">
-                                                                        Canceled
+                                                                        Cancel Order
                                                                     </button>
                                                                 </form>
                                                             </div>
