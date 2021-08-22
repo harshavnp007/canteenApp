@@ -9,7 +9,7 @@
                 <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
                     <!-- Article -->
                     <article class="overflow-hidden rounded-lg shadow-lg">
-                        <div class="relative">
+                        <div class="relative group">
                             @if ($meal->getMedia()->count() > 0)
                                 <img alt="{{$meal->name}}" class="block m-auto h-auto" src="{{ $meal->getFirstMediaUrl('default', 'thumb') }}">
                             @else
@@ -18,6 +18,10 @@
                             <span class="text-white absolute capitalize bottom-0 left-0 px-2 py-1 block bg-gradient-to-r from-gray-800">
                                 {{array_search($meal->category,\App\Models\Meal::$categories)}}
                             </span>
+
+                            <div class="px-4 pt-2 absolute left-0 top-0 w-full items-center justify-center text-left h-full group-hover:flex flex-col hidden bg-gray-900 bg-opacity-50 text-white text-lg">
+                                <p>{!! $meal->description !!}</p>
+                            </div>
                         </div>
                         <header class="flex items-center justify-between leading-tight p-2 md:p-4">
                             <h1 class="text-lg">

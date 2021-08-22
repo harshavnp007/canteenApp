@@ -52,7 +52,16 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                {{$detail->credited ? $detail->rzp_id : $detail->common_order_number}}
+                                                @if($detail->credited)
+                                                    @if(isset($detail->rzp_id))
+                                                        {{$detail->rzp_id}}
+                                                    @else
+                                                        Canceled Order
+                                                        <span class="d-block">{{$detail->common_order_number}}</span>
+                                                    @endif
+                                                @else
+                                                    {{$detail->common_order_number}}
+                                                @endif
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

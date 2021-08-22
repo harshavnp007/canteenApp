@@ -39,7 +39,16 @@
                             {{ $walletDetail->credited ? 'Created' : 'Debited' }}
                         </td>
                         <td class="block lg:table-cell px-4 py-2 {{ !$walletDetail->credited ? 'text-red-400' : ''}}">
-                            {{ $walletDetail->credited ? $walletDetail->rzp_id : $walletDetail->common_order_number }}
+                            @if($walletDetail->credited)
+                                @if(isset($walletDetail->rzp_id))
+                                    {{$walletDetail->rzp_id}}
+                                @else
+                                    Canceled Order
+                                    <span class="d-block">{{$walletDetail->common_order_number}}</span>
+                                @endif
+                            @else
+                                {{$walletDetail->common_order_number}}
+                            @endif
                         </td>
                         <td class="block lg:table-cell px-4 py-2">
                             {{\Carbon\Carbon::parse($walletDetail->created_at)->format('d-m-Y')}}
@@ -71,14 +80,15 @@
                 <th class="text-left px-4 py-2 w-1/4">
                     Status
                 </th>
-                <th class="text-left px-4 py-2 w-1/4">Status</th>
+                <th class="text-left px-4 py-2 w-1/4"></th>
             </tr>
             </thead>
             <tbody>
             @foreach($orders->groupBy('common_order_number') as $common_order_number=>$commonOrder)
                 <tr class="bg-red-800 bg-opacity-5 hover:bg-opacity-10">
-                   <td colspan="3">{{$common_order_number}}</td>
-                   <td><i class="fa fa-rupee"></i>{{$commonOrder->first()->total_price}}</td>
+                   <td colspan="2">{{$common_order_number}}</td>
+                   <td><i class="fa fa-calendar"></i>{{Carbon\Carbon::parse($commonOrder->first()->created_at)->format('d-m-Y')}}</td>
+                   <td class="text-right"><i class="fa fa-rupee"></i>{{$commonOrder->first()->total_price}}</td>
                 </tr>
                 @foreach($commonOrder as $order)
                     @if ($loop->odd)
@@ -102,7 +112,22 @@
                                 @endif
                             </td>
                             <td class="block lg:table-cell px-4 py-2">
-                                {{Carbon\Carbon::parse($order->created_at)->format('d-m-Y')}}
+                                <div class="flex space-x-2">
+                                    @if($order->status == 1)
+                                        <form action="{{secure_url('success/order/'.$order->id)}}" method="post">
+                                            @csrf
+                                            <button class="bg-green-400 text-white p-2 rounded-md text-sm" type="submit">
+                                                Completed
+                                            </button>
+                                        </form>
+                                        <form action="{{secure_url('reject/order/'.$order->id)}}" method="post">
+                                            @csrf
+                                            <button class="bg-red-400 text-white p-2 rounded-md text-sm" type="submit">
+                                                Canceled
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                 @endforeach

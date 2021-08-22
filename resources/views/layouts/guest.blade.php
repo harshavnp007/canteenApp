@@ -17,7 +17,7 @@
 <body class="antialiased">
 
 <!-- Section 1 -->
-<section class="w-full px-3 h-screen antialiased lg:px-6" @if(request()->is('/')) style="background: url('{{secure_asset('assets/images/home.png')}}');background-size: cover;background-repeat: no-repeat;background-position: center" @endif>
+<section class="w-full px-3 h-screen antialiased lg:px-6" @if(request()->is('/')) style="background: url('{{secure_asset('assets/images/homepage.jpg')}}');background-size: cover;background-repeat: no-repeat;background-position: center" @endif>
     <div class="mx-auto max-w-7xl">
         <nav class="absolute px-6 top-0 left-0 {{request()->is('/') ? '' : 'bg-gray-600 shadow-lg'}} w-full z-50 h-20 mx-auto" x-data="{ showMenu: false }">
             <div class="container max-w-7xl relative flex flex-wrap items-center justify-between h-20 mx-auto font-medium sm:px-4 md:px-2">

@@ -12,6 +12,7 @@ use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\AllergenController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\PermissionController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,30 @@ Route::get('/',function (){
 Route::get('meals',[\App\Http\Controllers\MealsController::class,'meals']);
 
 Route::middleware(['auth'])->group(function() {
+    Route::post('success/order/{order_id}',function (Request $request,$order_id){
+        $order = \App\Models\Order::find($order_id);
+        if($order->status == 1){
+            $order->status = 2;
+            $order->save();
+            return redirect()->back();
+        }else{
+            return redirect()->back();
+        }
+    });
+
+    Route::post('reject/order/{order_id}',function (Request $request,$order_id){
+        $order = \App\Models\Order::find($order_id);
+        if($order->status == 1){
+            $order->status = 3;
+            $wallet = \App\Models\Wallet::where('user_id',\Illuminate\Support\Facades\Auth::id())->first();
+            \App\Models\WalletDetail::create(['wallet_id'=>$wallet->id,'common_order_number'=>$order->common_order_number,'credited'=>true,'amount'=>$order->each_price]);
+            $order->save();
+            return redirect()->back();
+        }else{
+            return redirect()->back();
+        }
+    });
+
     Route::get('home', [PagesController::class, 'homepage'])->name('homepage');
 
     Route::post('/upload', [UploadController::class, 'store'])->name('upload');

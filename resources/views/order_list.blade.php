@@ -19,30 +19,39 @@
                                     <div>
                                         <div class="flex justify-between mb-1 mt-5">
                                             <span>#{{$order_number}}</span>
-                                            <span class="flex">
-                                                @if($groupedOrder->first()->status == 2)
-                                                    success
-                                                @elseif($groupedOrder->first()->status == 3)
-                                                    <form action="{{secure_url('retry/payment/'.$order_number)}}" method="post">
-                                                        @csrf
-                                                        failure <x-button type="submit">Retry</x-button>
-                                                    </form>
-                                                @else
-                                                    Order Received
-                                                @endif
-                                            </span>
                                             <span>₹{{$groupedOrder->first()->total_price}}</span>
                                             <span>{{\Carbon\Carbon::parse($groupedOrder->first()->created_at)->format('d-m-Y')}}</span>
                                         </div>
                                         <div class="py-2 px-3 border-2 w-full">
                                             @foreach($groupedOrder as $eachOrder)
                                                 <div class="flex justify-between items-center py-3 @if(!$loop->first) border-t @endif">
-                                                    <div class="flex items-center"> <img src="{{$eachOrder->meal->getFirstMediaUrl('default', 'thumb') != null ? $eachOrder->meal->getFirstMediaUrl('default', 'thumb') : 'https://via.placeholder.com/640x360.png?text=No+Image'}}" width="60" class="rounded-full ">
+                                                    <div class="flex-1 flex items-center"> <img src="{{$eachOrder->meal->getFirstMediaUrl('default', 'thumb') != null ? $eachOrder->meal->getFirstMediaUrl('default', 'thumb') : 'https://via.placeholder.com/640x360.png?text=No+Image'}}" width="60" class="rounded-full ">
                                                         <div class="flex flex-col ml-3"> <span class="md:text-md font-medium">{{$eachOrder->meal->name}}</span> <span class="text-xs font-light text-gray-400">#{{$eachOrder->order_number}} </span> </div>
                                                     </div>
-                                                    <div class="flex justify-center items-center">
-
-                                                        <div class="pr-8 "> <span class="text-xs font-medium">({{$eachOrder->qty}} Qty)</span> </div>
+                                                    <div class="flex-1 text-center">
+                                                        @if($eachOrder->status == 2)
+                                                            success
+                                                        @elseif($eachOrder->status == 3)
+                                                            Order Canceled
+                                                        @else
+                                                            <div class="flex justify-center space-x-2">
+                                                                <form action="{{secure_url('success/order/'.$eachOrder->id)}}" method="post">
+                                                                    @csrf
+                                                                    <button class="bg-green-400 text-white p-2 rounded-md text-sm" type="submit">
+                                                                        Completed
+                                                                    </button>
+                                                                </form>
+                                                                <form action="{{secure_url('reject/order/'.$eachOrder->id)}}" method="post">
+                                                                    @csrf
+                                                                    <button class="bg-red-400 text-white p-2 rounded-md text-sm" type="submit">
+                                                                        Canceled
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="flex-1 flex justify-end items-right">
+                                                        <span class="text-xs font-medium">({{$eachOrder->qty}} Qty)</span>
                                                     </div>
                                                 </div>
                                             @endforeach

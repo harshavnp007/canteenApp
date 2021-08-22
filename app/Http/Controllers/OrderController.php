@@ -40,6 +40,7 @@ class OrderController extends Controller
                     'order_number'=>$this->uniqueOrderNum(),
                     'user_id'=>Auth::id(),
                     'status'=>1,
+                    'each_price'=>$cart->meal->price * $cart->qty
                 ];
                 if($payment_type == 3){
                     $rzp_id = $request->get('rzp_id');
