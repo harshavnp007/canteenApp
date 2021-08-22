@@ -29,27 +29,29 @@
                             </a>
                         </h1>
                         @auth
-                            <div class="">
-                                @if($meal->stocks)
-                                    @if($meal->cart_info_count <= 0)
-                                        <form action="{{secure_url('cart/'.$meal->id)}}" method="post">
-                                            @csrf
-                                            <x-button type="submit">
+                            @if(Auth::user()->hasRole('user'))
+                                <div class="">
+                                    @if($meal->stocks)
+                                        @if($meal->cart_info_count <= 0)
+                                            <form action="{{secure_url('cart/'.$meal->id)}}" method="post">
+                                                @csrf
+                                                <x-button type="submit">
                                                     <span class="flex items-center space-x-2">
                                                         <span>Add</span>
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 ml-2 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                                         </svg>
                                                     </span>
-                                            </x-button>
-                                        </form>
+                                                </x-button>
+                                            </form>
+                                        @else
+                                            <x-nav-link href="{{secure_url('cart')}}">View Basket</x-nav-link>
+                                        @endif
                                     @else
-                                        <x-nav-link href="{{secure_url('cart')}}">View Basket</x-nav-link>
+                                        <x-button type="button" disabled>Out of Stock</x-button>
                                     @endif
-                                @else
-                                    <x-button type="button" disabled>Out of Stock</x-button>
-                                @endif
-                            </div>
+                                </div>
+                            @endif
                         @endauth
                     </header>
                 </article>
